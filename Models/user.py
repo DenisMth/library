@@ -17,7 +17,12 @@ class Users(Base):
     username: Mapped[str] = mapped_column(String(100))
     password: Mapped[str] = mapped_column(String(255))
 
+    role: Mapped[str] = mapped_column(String(100))
+
     email: Mapped[str] = mapped_column(String(200))
+
+    def repr(self):
+        return f"{self.first_name} {self.last_name} {self.username} {self.role} {self.email}"
 
     
     
