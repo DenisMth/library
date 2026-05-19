@@ -6,18 +6,10 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     pass
 
-class Users(Base):
-    __tablename__ = "users"
+class Authors(Base):
+    __tablename__ = "authors"
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
     first_name: Mapped[str] = mapped_column(String(100))
     last_name: Mapped[str] = mapped_column(String(100))
-    
-    username: Mapped[str] = mapped_column(String(100))
-    password: Mapped[str] = mapped_column(String(255))
-
-    email: Mapped[str] = mapped_column(String(200))
-
-    
-    
