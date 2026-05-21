@@ -10,3 +10,21 @@ def create_book(session: Session, title: str, author_id: int, status: str, categ
     session.refresh(book)
 
     return book
+
+def get_book_by_id(session, book_id):
+    stmt = select(Books).where(Books.id == book_id)
+    book = session.execute(stmt).scalar_one_or_none()
+
+    return book
+
+def delete_book_by_id(session, book_id):
+    stmt = select(Books).where(Books.id == book_id)
+    book = session.execute(stmt).scalar_one_or_none()
+
+    if book is None:
+        return False
+
+    session.delete(book)
+    session.commit()
+
+    return True

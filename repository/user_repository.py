@@ -26,9 +26,58 @@ def create_user(session: Session, first_name: str, last_name: str, username: str
         role=role,
         email=email)
 
-    session.add(user)
+    try:
+
+        session.add(user)
+        session.commit()
+        session.refresh(user)
+        return user
+    except:
+        session.rollback()
+        pass
+
+
+
+def get_user_by_id(session: Session, id: int):
+    stmt = select(Users).where(Users.id == id)
+    user = session.execute(stmt).scalar_one_or_none()
+    return user
+
+def update_user_last_name(session: Session, user_id, last_name):
+    stmt = select(Users).where(Users.id == user_id)
+    user = session.execute(stmt).scalar_one_or_none()
+
+    if user is None:
+        return False
+
+    user.last_name = last_name
     session.commit()
     session.refresh(user)
 
     return user
+
+def update_user_first_name(session: Session, user_id, first_name):
+    stmt = select(Users).where(Users.id == user_id)
+    user = session.execute(stmt).scalar_one_or_none()
+
+    if user is None:
+        return False
+
+    user.last_name = first_name
+    session.commit()
+    session.refresh(user)
+
+    return user
+
+def delete_user_by_id(session, user_id):
+    stmt = select(Users).where(Users.id == user_id)
+    user = session.execute(stmt).scalar_one_or_none()
+
+    if user is None:
+        return False
+
+    session.delete(user)
+    session.commit()
+
+    return True
 

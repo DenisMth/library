@@ -25,4 +25,7 @@ class RentedBooks(Base):
 
     start_date: Mapped[TIMESTAMP] = mapped_column(TIMESTAMP)
     end_date: Mapped[TIMESTAMP] = mapped_column(TIMESTAMP)
-    return_date: Mapped[TIMESTAMP] = mapped_column(TIMESTAMP)
+    return_date: Mapped[TIMESTAMP] = mapped_column(
+        TIMESTAMP,
+        nullable = True
+    )
