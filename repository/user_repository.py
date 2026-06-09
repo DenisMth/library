@@ -2,6 +2,16 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 from Models.user import Users
 import bcrypt
+from pydantic import BaseModel, EmailStr
+from fastapi import HTTPException
+
+class User(BaseModel):
+    first_name: str
+    last_name: str
+    username: str
+    password: str
+    role: str
+    email: EmailStr
 
 def hash_password(password: str):
 
@@ -17,14 +27,14 @@ def verify_password(password: str, hashed: str):
         hashed.encode()
     )
 
-def create_user(session: Session, first_name: str, last_name: str, username: str, password, role: str, email: str):
+def create_user(session: Session, user_data: User):
     user = Users(
-        first_name=first_name,
-        last_name=last_name,
-        username=username,
-        password=hash_password(password),
-        role=role,
-        email=email)
+        first_name=user_data.first_name,
+        last_name=user_data.last_name,
+        username=user_data.username,
+        password=hash_password(user_data.password),
+        role=user_data.role,
+        email=user_data.email)
 
     try:
 
@@ -32,9 +42,9 @@ def create_user(session: Session, first_name: str, last_name: str, username: str
         session.commit()
         session.refresh(user)
         return user
-    except:
+    except Exception as e:
         session.rollback()
-        pass
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 
